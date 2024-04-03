@@ -1,0 +1,2 @@
+class PlantJournal < ApplicationRecord
+end
