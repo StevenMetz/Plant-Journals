@@ -1,6 +1,6 @@
-class CreatePlantJournals < ActiveRecord::Migration[7.1]
+class CreatePlants < ActiveRecord::Migration[7.1]
   def change
-    create_table :plant_journals do |t|
+    create_table :plants do |t|
       t.string :title
       t.text :description
       t.string :likes
