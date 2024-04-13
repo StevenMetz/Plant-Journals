@@ -31,4 +31,8 @@ RSpec.describe Plant, type: :model do
       expect(plant.errors[:water_frequency]).to include("can't be blank")
     end
   end
+  # TODO: Create Association Tests
+  describe "associations" do
+    pending "Add association tests after other Models are made to #{__FILE__}"
+  end
 end
