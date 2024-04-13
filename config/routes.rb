@@ -1,9 +1,5 @@
 Rails.application.routes.draw do
-  get 'plants/index'
-  get 'plants/show'
-  get 'plants/create'
-  get 'plants/update'
-  get 'plants/destroy'
+  resources :plants
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
