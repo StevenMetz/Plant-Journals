@@ -1,0 +1,5 @@
+@plant_journals.map do |plant_journal|
+  {
+    id: plant_journal.id,
+  }
+end

@@ -27,4 +27,8 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "Associations" do
+    it { should have_one(:plant_journal) }
+    it { should have_many(:plants) }
+  end
 end

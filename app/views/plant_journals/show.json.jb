@@ -1,0 +1,22 @@
+json = {
+  id: @plant_journal.id,
+  title: @plant_journal.title
+}
+
+json[:plants] = @plant_journal.plants.map do |plant|
+{
+    title: plant.title,
+    description: plant.description,
+    likes: plant.likes,
+    dislikes: plant.dislikes,
+    water_frequency: plant.water_frequency,
+    temperature: plant.temperature,
+    sun_light_exposure: plant.sun_light_exposure
+}
+end
+
+json[:created_at] = @plant_journal.created_at
+
+json[:updated_at] = @plant_journal.updated_at
+
+json

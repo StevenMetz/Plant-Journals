@@ -1,0 +1,9 @@
+{
+   title: @plant.title,
+    description: @plant.description,
+    likes: @plant.likes,
+    dislikes: @plant.dislikes,
+    water_frequency: @plant.water_frequency,
+    temperature: @plant.temperature,
+    sun_light_exposure: @plant.sun_light_exposure
+}

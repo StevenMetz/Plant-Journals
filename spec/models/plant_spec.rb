@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Plant, type: :model do
+  let(:user) { create(:user) }
+
   describe "validations" do
     it "is valid with valid attributes" do
       plant = Plant.new(
@@ -10,7 +12,8 @@ RSpec.describe Plant, type: :model do
         dislikes: 2,
         water_frequency: "Weekly",
         temperature: "Moderate",
-        sun_light_exposure: "Partial Sun"
+        sun_light_exposure: "Partial Sun",
+        user_id: user.id
       )
       expect(plant).to be_valid
     end
@@ -25,7 +28,12 @@ RSpec.describe Plant, type: :model do
       expect(plant).not_to be_valid
       expect(plant.errors[:description]).to include("can't be blank")
     end
-    it "is not valid without a water_frequency" do
+    it "is not valid without a water frequency" do
+      plant = Plant.new(water_frequency: nil)
+      expect(plant).not_to be_valid
+      expect(plant.errors[:water_frequency]).to include("can't be blank")
+    end
+    it "is not valid without a user" do
       plant = Plant.new(water_frequency: nil)
       expect(plant).not_to be_valid
       expect(plant.errors[:water_frequency]).to include("can't be blank")
@@ -33,6 +41,14 @@ RSpec.describe Plant, type: :model do
   end
   # TODO: Create Association Tests
   describe "associations" do
-    pending "Add association tests after other Models are made to #{__FILE__}"
+    it "can belong to a plant journal" do
+      association = described_class.reflect_on_association(:plant_journal)
+      expect(association).not_to be_nil
+      expect(association.options[:optional]).to eq(true)
+    end
+
+    it "belongs to a user" do
+      should belong_to(:user)
+    end
   end
 end
