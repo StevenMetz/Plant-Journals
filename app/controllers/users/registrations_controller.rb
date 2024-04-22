@@ -30,8 +30,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
   def delete_user
     user = User.find_by(id: current_user.id)
-    puts "user ID is ", user.id
-    puts "current user ID ", current_user.id
     if current_user.id == user.id
       if user.destroy
         respond_with(user, message: 'Successfully deleted user', status: :ok)

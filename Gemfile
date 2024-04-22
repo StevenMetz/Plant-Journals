@@ -16,7 +16,7 @@ gem "puma", ">= 5.0"
 gem 'rubocop', '~> 1.63', '>= 1.63.1'
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
-gem "jb"
+gem 'jb', '~> 0.8.0'
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 
@@ -42,7 +42,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'pry-rails'
-
+  gem 'shoulda-matchers', '~> 6.2'
 end
 
 group :development do
