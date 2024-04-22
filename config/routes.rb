@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resources :plant_journals
+  resources :plant_journals do
+    delete 'plants/:id', to: 'plant_journals#destroy_plant', as: 'destroy_plant'
+  end
   resources :plants
   devise_for :users, skip: :all
   devise_scope :user do

@@ -1,4 +1,5 @@
 class PlantsController < ApplicationController
+  before_action :authenticate_user!
   def index
     @plants = Plant.all
     render :index
@@ -34,8 +35,8 @@ class PlantsController < ApplicationController
     plant = Plant.find(params[:id])
 
     if plant.delete
-
-      render json: {Message: "Plant has been deleted"}
+      title = plant.title || "Plant"
+      render json: {Message: "#{title} has been removed"}
 
       else
         render json: {Error: plant.errors.full_messages}, status: :bad_request

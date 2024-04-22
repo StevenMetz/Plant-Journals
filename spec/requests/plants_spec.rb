@@ -2,6 +2,9 @@ require 'rails_helper'
 
 RSpec.describe PlantsController, type: :controller do
   let(:user) { create(:user) }
+  before do
+    sign_in user
+  end
   describe "POST #create" do
     context "with valid parameters" do
       it "creates a new plant" do
@@ -16,7 +19,7 @@ RSpec.describe PlantsController, type: :controller do
           user_id: user.id
         }
         expect {
-          post :create, params: plant_params
+          post :create, params: plant_params, as: :json
         }.to change(Plant, :count).by(1)
       end
 
@@ -31,7 +34,7 @@ RSpec.describe PlantsController, type: :controller do
           sun_light_exposure: "Partial Sun",
           user_id: user.id
         }
-        post :create, params: plant_params
+        post :create, params: plant_params, as: :json
         expect(response).to have_http_status(:ok)
       end
     end
@@ -48,7 +51,7 @@ RSpec.describe PlantsController, type: :controller do
           sun_light_exposure: "Partial Sun"
         }
         expect {
-          post :create, params: invalid_params
+          post :create, params: invalid_params, as: :json
         }.not_to change(Plant, :count)
       end
 

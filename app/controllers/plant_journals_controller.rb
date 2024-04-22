@@ -1,5 +1,5 @@
 class PlantJournalsController < ApplicationController
-
+  before_action :authenticate_user!
   def show
     @plant_journal = PlantJournal.find_by(user_id: current_user.id)
     render :show
@@ -17,11 +17,22 @@ class PlantJournalsController < ApplicationController
     end
   end
 
-  def delete_plant
+  def destroy_plant
+    plant = current_user.plants.find_by(id: params[:id])
 
+    if plant
+      if plant.update(plant_journal_id: nil)
+        render json: { message: "#{plant.title} has been removed from your journal" }, status: :ok
+      else
+        render json: { message: "#{plant.title} couldn't be removed from your journal",
+                      errors: plant.errors.full_messages }, status: :unprocessable_entity
+      end
+    else
+      render json: { message: "Plant not found or unauthorized to delete" }, status: :unprocessable_entity
+    end
   end
   def destroy
-    plant_journal.find_by(user_id: current_user.id)
+    plant_journal = PlantJournal.find_by(user_id: current_user.id)
 
     if plant_journal && current_user
       plant_journal.destroy
