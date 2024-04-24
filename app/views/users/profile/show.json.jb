@@ -1,0 +1,57 @@
+json = {
+  user: @user.name,
+  updated_at: @user.updated_at
+}
+
+json[:plant_journal] = {
+  id: @user.plant_journal.id,
+  title: @user.plant_journal.title
+  
+  }
+
+json[:plants] = @user.plants.map do |plant| 
+  {
+    id: plant.id,
+    title: plant.title,
+    description: plant.description,
+    likes: plant.likes,
+    dislikes: plant.dislikes,
+    water_frequency: plant.water_frequency,
+    temperature: plant.temperature,
+    sun_light_exposure: plant.sun_light_exposure,
+    journal_id: plant.plant_journal_id
+  }
+end
+
+json[:plant_journal][:plants] =  @user.plant_journal.plants.map do |plant|
+    {
+      id: plant.id,
+      title: plant.title,
+      description: plant.description,
+      likes: plant.likes,
+      dislikes: plant.dislikes,
+      water_frequency: plant.water_frequency,
+      temperature: plant.temperature,
+      sun_light_exposure: plant.sun_light_exposure
+    }
+  end
+
+json[:shared_journals] = @user.shared_journals.map do |journal|
+  {
+    id: journal.id,
+    users_name: journal.plant_journal.user.name,
+    plants: journal.plant_journal.plants.map {|plant| 
+    {
+      id: plant.id,
+      title: plant.title,
+      description: plant.description,
+      likes: plant.likes,
+      dislikes: plant.dislikes,
+      water_frequency: plant.water_frequency,
+      temperature: plant.temperature,
+      sun_light_exposure: plant.sun_light_exposure
+    }
+    },
+  }
+end
+json
