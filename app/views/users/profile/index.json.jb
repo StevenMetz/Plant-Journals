@@ -1,0 +1,5 @@
+@users.map do |user|
+  {
+    id: user.id
+  }
+end

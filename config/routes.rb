@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :plants
   devise_for :users, skip: :all
   devise_scope :user do
+    get 'user/profile' => "users/profile#show"
     delete 'logout' => "users/sessions#destroy"
     post 'login' => "users/sessions#create"
     post 'signup' => 'users/registrations#create'
