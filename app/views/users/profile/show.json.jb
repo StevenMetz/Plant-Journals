@@ -1,4 +1,5 @@
 json = {
+  id: @user.id
   user: @user.name,
   updated_at: @user.updated_at
 }
