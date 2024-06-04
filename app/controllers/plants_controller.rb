@@ -11,13 +11,13 @@ class PlantsController < ApplicationController
   end
 
   def create
-    plant = Plant.new(plant_params)
+    @plant = Plant.new(plant_params)
 
-    if plant.save
+    if @plant.save
       render :show
 
     else
-      render json: {errors: plant.errors.full_messages}, status: :bad_request
+      render json: {errors: @plant.errors.full_messages}, status: :bad_request
     end
   end
 

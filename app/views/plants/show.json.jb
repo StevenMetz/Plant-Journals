@@ -1,5 +1,5 @@
 {
-   title: @plant.title,
+    title: @plant.title,
     description: @plant.description,
     likes: @plant.likes,
     dislikes: @plant.dislikes,
