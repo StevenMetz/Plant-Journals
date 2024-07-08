@@ -15,7 +15,6 @@ class PlantsController < ApplicationController
 
     if @plant.save
       render :show
-
     else
       render json: {errors: @plant.errors.full_messages}, status: :bad_request
     end

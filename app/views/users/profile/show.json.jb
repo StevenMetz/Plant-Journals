@@ -34,6 +34,7 @@ json[:plant_journal][:plants] =  @user.plant_journal.plants.map do |plant|
       water_frequency: plant.water_frequency,
       temperature: plant.temperature,
       sun_light_exposure: plant.sun_light_exposure
+      
     }
   end
 
