@@ -55,7 +55,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
   private
     def user_params
-      params.require(:user).permit(:name,:email)
+      params.require(:user).permit(:name,:email, :image)
     end
     def respond_with(resource, opts = {})
       if resource.persisted?

@@ -11,8 +11,10 @@ class PlantsController < ApplicationController
   end
 
   def create
+    Rails.logger.debug "Incoming params: #{params.inspect}"
     @plant = Plant.new(plant_params)
-
+    @plant.image.attach(params[:image]) unless params[:image] == 'null'
+    Rails.logger.info "Permitted parameters: #{plant_params.inspect}"
     if @plant.save
       render :show
     else
@@ -45,8 +47,9 @@ class PlantsController < ApplicationController
 
   private
     def plant_params
-      params.permit(:title, :description, :likes, :dislikes, :water_frequency, :temperature, :sun_light_exposure, :user_id, :plant_journal_id, :image)
+      params.permit(:user_id, :plant_journal_id, :title, :dislikes, :water_frequency, :temperature, :sun_light_exposure, :likes, :description, :image).tap do |whitelisted|
+        whitelisted.delete(:image) if params[:image] == "null"
+      end
     end
-
 
 end
