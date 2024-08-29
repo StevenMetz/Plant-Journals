@@ -1,20 +1,14 @@
 # frozen_string_literal: true
 
 class Users::RegistrationsController < Devise::RegistrationsController
-  before_action :configure_permitted_parameters, only: [:create]
-  before_action :configure_permitted_parameters, only: [:update]
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
   include RackSessionsFix
   respond_to :json
   # POST /resource
   def create
+    Rails.logger.info(params.inspect)
     super
   end
-
-  # PUT /resource
-  # def update
-  #   super
-  # end
 
   def update_user
     user = User.find_by(id: current_user.id)
@@ -55,22 +49,25 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
   private
     def user_params
-      params.require(:user).permit(:name,:email, :image)
+      params.require(:user).permit(:name, :email, :image, :banner)
     end
     def respond_with(resource, opts = {})
+      Rails.logger.debug("opts: #{opts.inspect}")
+      Rails.logger.debug("Resources: #{resource.inspect}")
       if resource.persisted?
         @token = request.env['warden-jwt_auth.token']
         headers['Authorization'] = @token
 
         render json: {
           status: {
-            code: opts[:status] || 422,
+            code: 200,
             message: opts[:message] || "Success",
             token: @token,
             data: UserSerializer.new(resource).serializable_hash[:data][:attributes]
           }
         }
       else
+
         render json: {
           status: {
             message: opts[:message] ? "#{opts[:message]}. #{resource.errors.full_messages.to_sentence}" : "Something went wrong #{resource.errors.full_messages.to_sentence}"

@@ -10,7 +10,7 @@ RSpec.describe Users::RegistrationsController, type: :controller do
   describe "POST #create" do
     context "With Valid Parameters" do
       it "creates a new user" do
-        post :create, params: { user: { email: "test@test.com", password: "password", password_confirmation: "password" } }
+        post :create, params: { user: { email: "test@test.com", name: "Steven", password: "password", password_confirmation: "password" } }
         expect(response).to have_http_status(:success)
         json_response = JSON.parse(response.body)
         expect(json_response['status']['message']).to eq('Success')

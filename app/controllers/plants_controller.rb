@@ -12,7 +12,7 @@ class PlantsController < ApplicationController
 
   def create
     Rails.logger.debug "Incoming params: #{params.inspect}"
-    @plant = Plant.new(plant_params)
+    @plant = Plant.new(plant_params.merge(user_id: current_user.id))
     @plant.image.attach(params[:image]) unless params[:image] == 'null'
     Rails.logger.info "Permitted parameters: #{plant_params.inspect}"
     if @plant.save
@@ -26,7 +26,7 @@ class PlantsController < ApplicationController
     @plant = Plant.find(params[:id])
     @plant.update(plant_params)
     if @plant.save
-      :show
+      render :show
     else
       render json: { errors: @plant.errors.full_messages }, status: :bad_request
     end
@@ -47,7 +47,7 @@ class PlantsController < ApplicationController
 
   private
     def plant_params
-      params.permit(:user_id, :plant_journal_id, :title, :dislikes, :water_frequency, :temperature, :sun_light_exposure, :likes, :description, :image).tap do |whitelisted|
+      params.permit(:plant_journal_id, :title, :dislikes, :water_frequency, :temperature, :sun_light_exposure, :likes, :description, :image).tap do |whitelisted|
         whitelisted.delete(:image) if params[:image] == "null"
       end
     end
