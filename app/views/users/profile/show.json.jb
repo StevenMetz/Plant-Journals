@@ -43,6 +43,7 @@ json = {
         {
           id: plant.id,
           user_id: plant.user_id,
+          user_name: plant.user.name,
           title: plant.title,
           image: plant.image.attached? ? (plant.image.service_name == 'Cloudinary' ? plant.image.url : rails_blob_url(plant.image, host: "http://localhost:3000")) : nil,
           description: plant.description,

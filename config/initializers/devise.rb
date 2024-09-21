@@ -315,7 +315,8 @@ Devise.setup do |config|
     jwt.secret = Rails.application.credentials.devise_jwt_secret_key!
     # add the other routes here where you need authentication to take place
     jwt.dispatch_requests = [
-      ['POST', %r{^/login$}]
+      ['POST', %r{^/login$}],
+      ['POST', %r{^/signup$}],
     ]
     jwt.revocation_requests = [
       ['DELETE', %r{^/logout$}]

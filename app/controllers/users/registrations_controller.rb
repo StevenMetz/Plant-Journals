@@ -52,10 +52,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
       params.require(:user).permit(:name, :email, :image, :banner)
     end
     def respond_with(resource, opts = {})
-      Rails.logger.debug("opts: #{opts.inspect}")
-      Rails.logger.debug("Resources: #{resource.inspect}")
       if resource.persisted?
-        @token = request.env['warden-jwt_auth.token']
+        @token = Warden::JWTAuth::UserEncoder.new.call(resource, :user, nil).first
         headers['Authorization'] = @token
 
         render json: {

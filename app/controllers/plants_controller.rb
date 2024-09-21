@@ -38,9 +38,8 @@ class PlantsController < ApplicationController
     if plant.delete
       title = plant.title || "Plant"
       render json: {Message: "#{title} has been removed"}
-
-      else
-        render json: {Error: plant.errors.full_messages}, status: :bad_request
+    else
+      render json: {Error: plant.errors.full_messages}, status: :bad_request
     end
 
   end
