@@ -10,4 +10,4 @@ bundle install
 # perform database migrations in the build command.
 # Uncomment the following line:
 bundle exec rails db:migrate
-chmod a+x bin/render-build.sh
+chmod a+x /render-build.sh
