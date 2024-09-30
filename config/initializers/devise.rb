@@ -324,4 +324,5 @@ Devise.setup do |config|
     jwt.expiration_time = 1.day.from_now.to_i
     jwt.algorithm = "HS256"
   end
+
 end
