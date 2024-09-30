@@ -11,11 +11,12 @@ class PlantsController < ApplicationController
   end
 
   def create
-    @plant = Plant.new(plant_params)
-
+    Rails.logger.debug "Incoming params: #{params.inspect}"
+    @plant = Plant.new(plant_params.merge(user_id: current_user.id))
+    @plant.image.attach(params[:image]) unless params[:image] == 'null'
+    Rails.logger.info "Permitted parameters: #{plant_params.inspect}"
     if @plant.save
       render :show
-
     else
       render json: {errors: @plant.errors.full_messages}, status: :bad_request
     end
@@ -25,7 +26,7 @@ class PlantsController < ApplicationController
     @plant = Plant.find(params[:id])
     @plant.update(plant_params)
     if @plant.save
-      :show
+      render :show
     else
       render json: { errors: @plant.errors.full_messages }, status: :bad_request
     end
@@ -37,17 +38,17 @@ class PlantsController < ApplicationController
     if plant.delete
       title = plant.title || "Plant"
       render json: {Message: "#{title} has been removed"}
-
-      else
-        render json: {Error: plant.errors.full_messages}, status: :bad_request
+    else
+      render json: {Error: plant.errors.full_messages}, status: :bad_request
     end
 
   end
 
   private
     def plant_params
-      params.permit(:title, :description, :likes, :dislikes, :water_frequency, :temperature, :sun_light_exposure, :user_id, :plant_journal_id)
+      params.permit(:plant_journal_id, :title, :dislikes, :water_frequency, :temperature, :sun_light_exposure, :likes, :description, :image).tap do |whitelisted|
+        whitelisted.delete(:image) if params[:image] == "null"
+      end
     end
-
 
 end

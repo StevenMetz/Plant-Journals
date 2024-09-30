@@ -53,3 +53,5 @@ end
 gem "devise", "~> 4.9"
 gem 'devise-jwt'
 gem 'jsonapi-serializer'
+gem 'cloudinary'
+gem 'rmagick', '~> 6.0', '>= 6.0.1'

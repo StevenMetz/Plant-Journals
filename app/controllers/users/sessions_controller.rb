@@ -11,6 +11,7 @@ class Users::SessionsController < Devise::SessionsController
 
   # # DELETE /resource/sign_out
   def destroy
+    Rails.logger.info("Destroy action called for user: #{current_user.inspect}")
     super
   end
 

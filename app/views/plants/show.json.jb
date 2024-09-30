@@ -1,9 +1,15 @@
 {
-    title: @plant.title,
-    description: @plant.description,
-    likes: @plant.likes,
-    dislikes: @plant.dislikes,
-    water_frequency: @plant.water_frequency,
-    temperature: @plant.temperature,
-    sun_light_exposure: @plant.sun_light_exposure
+  id: @plant.id,
+  user_id: @plant.user_id,
+  title: @plant.title,
+  description: @plant.description,
+  likes: @plant.likes,
+  dislikes: @plant.dislikes,
+  water_frequency: @plant.water_frequency,
+  temperature: @plant.temperature,
+  sun_light_exposure: @plant.sun_light_exposure,
+  image: @plant.image.attached? ? 
+         (@plant.image.service_name == 'Cloudinary' ? @plant.image.url : rails_blob_url(@plant.image, host: "http://localhost:3000")) 
+         : nil,
+  updated_at: @plant.updated_at
 }

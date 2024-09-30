@@ -1,58 +1,60 @@
 json = {
   id: @user.id,
   user: @user.name,
+  plants: @user.plants.map { |plant| 
+    {
+      id: plant.id,
+      user_id: plant.user_id,
+      journal_id: plant.plant_journal_id,
+      title: plant.title,
+      image: plant.image.attached? ? (plant.image.service_name == 'Cloudinary' ? plant.image.url : rails_blob_url(plant.image, host: "http://localhost:3000")) : nil,
+      description: plant.description,
+      likes: plant.likes,
+      dislikes: plant.dislikes,
+      water_frequency: plant.water_frequency,
+      temperature: plant.temperature,
+      sun_light_exposure: plant.sun_light_exposure,
+    }
+  },
+  
+  plant_journal: {
+    id: @user.plant_journal ? @user.plant_journal.id : nil,
+    title:  @user.plant_journal ? @user.plant_journal.title : nil,
+    plants:  @user.plant_journal ? @user.plant_journal.plants.map { |plant|
+      {
+        id: plant.id,
+        user_id: plant.user_id,
+        title: plant.title,
+        image: plant.image.attached? ? (plant.image.service_name == 'Cloudinary' ? plant.image.url : rails_blob_url(plant.image, host: "http://localhost:3000")) : nil,
+        description: plant.description,
+        likes: plant.likes,
+        dislikes: plant.dislikes,
+        water_frequency: plant.water_frequency,
+        temperature: plant.temperature,
+        sun_light_exposure: plant.sun_light_exposure,
+      }
+    } : nil
+  },
+  shared_journals: @user.shared_journals.map { |journal|
+    {
+      id: journal.id,
+      users_name: journal.plant_journal.user.name,
+      plants: journal.plant_journal.plants.map { |plant| 
+        {
+          id: plant.id,
+          user_id: plant.user_id,
+          user_name: plant.user.name,
+          title: plant.title,
+          image: plant.image.attached? ? (plant.image.service_name == 'Cloudinary' ? plant.image.url : rails_blob_url(plant.image, host: "http://localhost:3000")) : nil,
+          description: plant.description,
+          likes: plant.likes,
+          dislikes: plant.dislikes,
+          water_frequency: plant.water_frequency,
+          temperature: plant.temperature,
+          sun_light_exposure: plant.sun_light_exposure,
+        }
+      }
+    }
+  },
   updated_at: @user.updated_at
 }
-
-json[:plant_journal] = {
-  id: @user.plant_journal.id,
-  title: @user.plant_journal.title
-  
-  }
-
-json[:plants] = @user.plants.map do |plant| 
-  {
-    id: plant.id,
-    title: plant.title,
-    description: plant.description,
-    likes: plant.likes,
-    dislikes: plant.dislikes,
-    water_frequency: plant.water_frequency,
-    temperature: plant.temperature,
-    sun_light_exposure: plant.sun_light_exposure,
-    journal_id: plant.plant_journal_id
-  }
-end
-
-json[:plant_journal][:plants] =  @user.plant_journal.plants.map do |plant|
-    {
-      id: plant.id,
-      title: plant.title,
-      description: plant.description,
-      likes: plant.likes,
-      dislikes: plant.dislikes,
-      water_frequency: plant.water_frequency,
-      temperature: plant.temperature,
-      sun_light_exposure: plant.sun_light_exposure
-    }
-  end
-
-json[:shared_journals] = @user.shared_journals.map do |journal|
-  {
-    id: journal.id,
-    users_name: journal.plant_journal.user.name,
-    plants: journal.plant_journal.plants.map {|plant| 
-    {
-      id: plant.id,
-      title: plant.title,
-      description: plant.description,
-      likes: plant.likes,
-      dislikes: plant.dislikes,
-      water_frequency: plant.water_frequency,
-      temperature: plant.temperature,
-      sun_light_exposure: plant.sun_light_exposure
-    }
-    },
-  }
-end
-json

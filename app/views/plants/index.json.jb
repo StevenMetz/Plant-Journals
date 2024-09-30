@@ -1,5 +1,9 @@
 @plants.map do |plant|
   {
+    id: plant.id,
+    user_id: plant.user_id,
+    plant_journal_id: plant.plant_journal_id,
+    image: plant.image.attached? ? (plant.image.service_name == 'Cloudinary' ? plant.image.url : rails_blob_url(plant.image, host: "http://localhost:3000")) : nil,
     title: plant.title,
     description: plant.description,
     likes: plant.likes,

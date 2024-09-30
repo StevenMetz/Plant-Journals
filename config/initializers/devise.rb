@@ -24,7 +24,7 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
+  config.mailer_sender = 'stevenm.codes@gmail.com'
 
   # Configure the class responsible to send e-mails.
   config.mailer = 'Devise::Mailer'
@@ -315,7 +315,8 @@ Devise.setup do |config|
     jwt.secret = Rails.application.credentials.devise_jwt_secret_key!
     # add the other routes here where you need authentication to take place
     jwt.dispatch_requests = [
-      ['POST', %r{^/login$}]
+      ['POST', %r{^/login$}],
+      ['POST', %r{^/signup$}],
     ]
     jwt.revocation_requests = [
       ['DELETE', %r{^/logout$}]
@@ -323,4 +324,5 @@ Devise.setup do |config|
     jwt.expiration_time = 1.day.from_now.to_i
     jwt.algorithm = "HS256"
   end
+
 end
