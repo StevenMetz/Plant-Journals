@@ -1,6 +1,7 @@
 json = {
   id: @user.id,
   user: @user.name,
+  email: @user.email,
   plants: @user.plants.map { |plant| 
     {
       id: plant.id,
