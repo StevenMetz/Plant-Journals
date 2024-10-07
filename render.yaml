@@ -1,12 +1,12 @@
 databases:
-  - name: mysite
-    databaseName: mysite
-    user: mysite
+  - name: BotanicalBuddies
+    databaseName: BotanicalBuddies
+    user: BotanicalBuddies
     plan: free
 
 services:
   - type: web
-    name: mysite
+    name: BotanicalBuddies
     runtime: ruby
     plan: free
     buildCommand: "./render-build.sh"
@@ -15,7 +15,7 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: mysite
+          name: BotanicalBuddies
           property: connectionString
       - key: RAILS_MASTER_KEY
         sync: false
