@@ -32,8 +32,12 @@ RSpec.describe PlantJournalsController, type: :controller do
     end
 
     context "with invalid parameters" do
-      it "returns unprocessable entity status" do
+      it "returns unprocessable entity status when title is missing" do
         post :create, params: { title: nil, user_id: user.id }, as: :json
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+      it "returns unprocessable entity status when no user" do
+        post :create, params: { title: nil, user_id: nil }, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end

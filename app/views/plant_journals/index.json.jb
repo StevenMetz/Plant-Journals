@@ -8,18 +8,18 @@
       title: @user.plant_journal.title,
       shared_with: @user.plant_journal.shared_users,
       plants: @user.plant_journal.plants.map {|plant|
-      {
-        id: plant.id,
-        user_id: plant.user_id,
-        title: plant.title,
-        image: plant.image.attached? ? (plant.image.service_name == 'Cloudinary' ? plant.image.url : rails_blob_url(plant.image, host: "http://localhost:3000")) : nil,
-        description: plant.description,
-        likes: plant.likes,
-        dislikes: plant.dislikes,
-        water_frequency: plant.water_frequency,
-        temperature: plant.temperature,
-        sun_light_exposure: plant.sun_light_exposure,
-      }
+        {
+          id: plant.id,
+          user_id: plant.user_id,
+          title: plant.title,
+          image: plant.image.attached? ? (plant.image.service_name == 'Cloudinary' ? plant.image.url : rails_blob_url(plant.image, host: "http://localhost:3000")) : nil,
+          description: plant.description,
+          likes: plant.likes,
+          dislikes: plant.dislikes,
+          water_frequency: plant.water_frequency,
+          temperature: plant.temperature,
+          sun_light_exposure: plant.sun_light_exposure,
+        }
       }
 
       },
@@ -28,18 +28,18 @@
       title: shared_plant_journal.plant_journal.title,
       shared_by:shared_plant_journal.plant_journal.user.name,
       plants: shared_plant_journal.plant_journal.plants.map{|plant|
-      {
-        id: plant.id,
-        user_id: plant.user_id,
-        title: plant.title,
-        image: plant.image.attached? ? (plant.image.service_name == 'Cloudinary' ? plant.image.url : rails_blob_url(plant.image, host: "http://localhost:3000")) : nil,
-        description: plant.description,
-        likes: plant.likes,
-        dislikes: plant.dislikes,
-        water_frequency: plant.water_frequency,
-        temperature: plant.temperature,
-        sun_light_exposure: plant.sun_light_exposure,
-      }
+        {
+          id: plant.id,
+          user_id: plant.user_id,
+          title: plant.title,
+          image: plant.image.attached? ? (plant.image.service_name == 'Cloudinary' ? plant.image.url : rails_blob_url(plant.image, host: "http://localhost:3000")) : nil,
+          description: plant.description,
+          likes: plant.likes,
+          dislikes: plant.dislikes,
+          water_frequency: plant.water_frequency,
+          temperature: plant.temperature,
+          sun_light_exposure: plant.sun_light_exposure,
+        }
       }
       }
   }

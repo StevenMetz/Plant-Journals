@@ -34,7 +34,7 @@ RSpec.describe Plant, type: :model do
       expect(plant.errors[:water_frequency]).to include("can't be blank")
     end
     it "is not valid without a user" do
-      plant = Plant.new(water_frequency: nil)
+      plant = Plant.new(user_id: nil)
       expect(plant).not_to be_valid
       expect(plant.errors[:water_frequency]).to include("can't be blank")
     end

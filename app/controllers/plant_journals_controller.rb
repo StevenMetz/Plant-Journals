@@ -2,7 +2,7 @@ class PlantJournalsController < ApplicationController
   before_action :authenticate_user!
   def index
     @user = current_user
-    @plant_journals = current_user.shared_journals
+    @plant_journals = current_user.plant_journals
     render :index
   end
   def show
@@ -11,18 +11,18 @@ class PlantJournalsController < ApplicationController
   end
 
   def create
-    plant_journal = PlantJournal.create(plant_params)
+    @plant_journal = PlantJournal.create(plant_params)
 
-    if plant_journal.save && current_user
-      render :show
+    if @plant_journal.save && current_user
+      render :show, as: :json
     else
       render json: {message: "Plant Journal couldn't be created",
-      Error: plant_journal.errors.full_messages.to_sentence,
+      Error: @plant_journal.errors.full_messages.to_sentence,
       }, status: :unprocessable_entity
     end
   end
   def share_journal
-    @journal = current_user.plant_journal # Assuming the current user can only have one plant journal; adjust if needed
+    @journal = current_user.plant_journals.sample(1) # Assuming the current user can only have one plant journal; adjust if needed
     begin
       user = User.find(params[:id])
     rescue ActiveRecord::RecordNotFound
