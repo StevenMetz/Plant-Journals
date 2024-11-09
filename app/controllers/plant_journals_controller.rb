@@ -22,9 +22,9 @@ class PlantJournalsController < ApplicationController
     end
   end
   def share_journal
-    @journal = current_user.plant_journals.sample(1) # Assuming the current user can only have one plant journal; adjust if needed
+    @journal = current_user.plant_journals.find_by(id: params[:id]) # Assuming the current user can only have one plant journal; adjust if needed
     begin
-      user = User.find(params[:id])
+      user = User.find_by(email: params[:email])
     rescue ActiveRecord::RecordNotFound
       render json: { message: 'User not found' }, status: :not_found
       return
@@ -47,11 +47,10 @@ class PlantJournalsController < ApplicationController
   end
 
   def destroy_plant
-    plant = current_user.plants.find_by(id: params[:id])
-
+    plant = current_user.plant_journals.find_by(id: params[:plant_journal_id]).plants.find_by(id: params[:id])
     if plant
       if plant.update(plant_journal_id: nil)
-        render json: { message: "#{plant.title} has been removed from your journal" }, status: :ok
+        render json: { message: "#{plant.title} has been removed from your journal", plants: current_user.plant_journals.find_by(id: params[:plant_journal_id]).plants }, status: :ok
       else
         render json: { message: "#{plant.title} couldn't be removed from your journal",
                       errors: plant.errors.full_messages }, status: :unprocessable_entity

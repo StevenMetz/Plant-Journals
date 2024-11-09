@@ -15,7 +15,8 @@ json = {
       water_frequency: plant.water_frequency,
       temperature: plant.temperature,
       sun_light_exposure: plant.sun_light_exposure,
-      created_on: plant.friendly_created
+      created_on: plant.created_at,
+      updated_on: plant.updated_at
     }
   end,
   
@@ -35,10 +36,12 @@ json = {
           water_frequency: plant.water_frequency,
           temperature: plant.temperature,
           sun_light_exposure: plant.sun_light_exposure,
-          created_on: plant.friendly_created
+          created_on: plant.created_at,
+          updated_on: plant.updated_at
         }
       end,
-      created_on: journal.friendly_created
+      created_on: journal.created_at,
+      updated_on: journal.updated_at
     }
   end : nil,
 
@@ -61,10 +64,10 @@ json = {
           sun_light_exposure: plant.sun_light_exposure
         }
       end,
-      created_on: journal.friendly_created
+      created_on: journal.created_at
 
     }
   end,
 
-  updated_at: @user.friendly_updated
+  updated_at: @user.updated_at
 }
