@@ -1,0 +1,5 @@
+{
+  id: @notification.id,
+  created_at: @notification.created_at,
+  updated_at: @notification.updated_at
+}

@@ -1,0 +1,6 @@
+@notifications.map do |notification|
+  {
+    id: notification.id,
+    url: notification_url(notification, format: :json)
+  }
+end
