@@ -43,6 +43,7 @@ group :development, :test do
   gem 'faker'
   gem 'pry-rails'
   gem 'shoulda-matchers', '~> 6.2'
+  gem 'rails-controller-testing'
 end
 
 group :development do

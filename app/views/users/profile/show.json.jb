@@ -2,11 +2,13 @@ json = {
   id: @user.id,
   user: @user.name,
   email: @user.email,
+  image: @user.image.attached? ? (@user.image.service_name == 'Cloudinary' ? @user.image.url : rails_blob_url(@user.image, host: "http://localhost:3000")) : nil,
+  bannerImage: @user.banner.attached? ? (@user.banner.service_name == 'Cloudinary' ? @user.banner.url : rails_blob_url(@user.banner, host: "http://localhost:3000")) : nil,
   plants: @user.plants.map do |plant|
     {
       id: plant.id,
       user_id: plant.user_id,
-      journal_id: plant.plant_journal_id,
+      journal_id:plant.plant_journals.pluck(:id),
       title: plant.title,
       image: plant.image.attached? ? (plant.image.service_name == 'Cloudinary' ? plant.image.url : rails_blob_url(plant.image, host: "http://localhost:3000")) : nil,
       description: plant.description,
@@ -15,7 +17,8 @@ json = {
       water_frequency: plant.water_frequency,
       temperature: plant.temperature,
       sun_light_exposure: plant.sun_light_exposure,
-      created_on: plant.friendly_created
+      created_on: plant.created_at,
+      updated_on: plant.updated_at
     }
   end,
   
@@ -35,10 +38,12 @@ json = {
           water_frequency: plant.water_frequency,
           temperature: plant.temperature,
           sun_light_exposure: plant.sun_light_exposure,
-          created_on: plant.friendly_created
+          created_on: plant.created_at,
+          updated_on: plant.updated_at
         }
       end,
-      created_on: journal.friendly_created
+      created_on: journal.created_at,
+      updated_on: journal.updated_at
     }
   end : nil,
 
@@ -61,10 +66,10 @@ json = {
           sun_light_exposure: plant.sun_light_exposure
         }
       end,
-      created_on: journal.friendly_created
+      created_on: journal.created_at
 
     }
   end,
 
-  updated_at: @user.friendly_updated
+  updated_at: @user.updated_at
 }

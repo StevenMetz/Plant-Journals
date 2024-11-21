@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_08_011802) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_09_164215) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_08_011802) do
     t.index ["user_id"], name: "index_plant_journals_on_user_id"
   end
 
+  create_table "plant_journals_plants", id: false, force: :cascade do |t|
+    t.bigint "plant_id", null: false
+    t.bigint "plant_journal_id", null: false
+    t.index ["plant_id", "plant_journal_id"], name: "index_plant_journals_plants_on_plant_id_and_plant_journal_id"
+    t.index ["plant_journal_id", "plant_id"], name: "index_plant_journals_plants_on_plant_journal_id_and_plant_id"
+  end
+
   create_table "plants", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -60,9 +67,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_08_011802) do
     t.string "sun_light_exposure"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "plant_journal_id"
     t.bigint "user_id"
-    t.index ["plant_journal_id"], name: "index_plants_on_plant_journal_id"
     t.index ["user_id"], name: "index_plants_on_user_id"
   end
 
@@ -107,7 +112,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_08_011802) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "plant_journals", "users"
-  add_foreign_key "plants", "plant_journals"
   add_foreign_key "plants", "users"
   add_foreign_key "shared_journals", "plant_journals"
   add_foreign_key "shared_journals", "users"
