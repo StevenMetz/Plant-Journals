@@ -1,7 +1,8 @@
 class PlantsController < ApplicationController
   before_action :authenticate_user!
+
   def index
-    @plants = Plant.all
+    @plants = Plant.where(user_id: current_user.id)
     render :index
   end
 
@@ -14,14 +15,30 @@ class PlantsController < ApplicationController
     Rails.logger.debug "Incoming params: #{params.inspect}"
     @plant = Plant.new(plant_params.merge(user_id: current_user.id))
     @plant.image.attach(params[:image]) unless params[:image] == 'null'
+
+    # Handle plant journal associations if provided
+    if params[:plant_journal_ids].present?
+      @plant.plant_journal_ids = params[:plant_journal_ids]
+    end
+
     Rails.logger.info "Permitted parameters: #{plant_params.inspect}"
+
     if @plant.save
       render :show
     else
-      render json: {errors: @plant.errors.full_messages}, status: :bad_request
+      render json: { errors: @plant.errors.full_messages }, status: :bad_request
     end
   end
-
+  def update
+    @plant = Plant.find_by(id: params[:id])
+    @plant.update(plant_params) if @plant.user_id == current_user.id
+    @plant.image.attach(params[:image]) unless params[:image] == 'null'
+    if @plant.save
+      render :show
+    else
+      render json: {message: "Unable to update plant", errors: @plant.errors.full_messages}, status: :bad_request
+    end
+  end
   def update_plant_journal
     ActiveRecord::Base.transaction do
       # Find plant journal and return early if not found
@@ -64,7 +81,8 @@ class PlantsController < ApplicationController
             next
           end
 
-          if plant.update(plant_journal_id: plant_journal.id)
+          # Instead of updating plant_journal_id, we'll add the journal to the plant's journals
+          if plant.plant_journals << plant_journal
             updated_plants << plant_id
           else
             failed_plants << {
@@ -80,9 +98,7 @@ class PlantsController < ApplicationController
           updated_plants: updated_plants
         }
         response[:failed_plants] = failed_plants if failed_plants.any?
-
         render json: response, status: :ok
-
       rescue StandardError => e
         Rails.logger.error("Error updating plant journal: #{e.message}")
         raise ActiveRecord::Rollback
@@ -94,21 +110,29 @@ class PlantsController < ApplicationController
 
   def destroy
     plant = Plant.find(params[:id])
-
     if plant.delete
       title = plant.title || "Plant"
-      render json: {Message: "#{title} has been removed"}
+      render json: { Message: "#{title} has been removed" }
     else
-      render json: {Error: plant.errors.full_messages}, status: :bad_request
+      render json: { Error: plant.errors.full_messages }, status: :bad_request
     end
-
   end
 
   private
+
     def plant_params
-      params.permit(:plant_journal_id, :title, :dislikes, :water_frequency, :temperature, :sun_light_exposure, :likes, :description, :image).tap do |whitelisted|
+      params.permit(
+        :title,
+        :dislikes,
+        :water_frequency,
+        :temperature,
+        :sun_light_exposure,
+        :likes,
+        :description,
+        :image,
+        plant_journal_ids: []  # Add this to allow multiple journal IDs
+      ).tap do |whitelisted|
         whitelisted.delete(:image) if params[:image] == "null"
       end
     end
-
 end

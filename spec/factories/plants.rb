@@ -1,13 +1,12 @@
 FactoryBot.define do
   factory :plant do
-    title { Faker::Lorem.word }
+    title { Faker::Lorem.words(number: 2).join(' ') }
     description { Faker::Lorem.paragraph }
     likes { Faker::Lorem.sentence }
-    dislikes { Faker::Lorem.sentence}
+    dislikes { Faker::Lorem.sentence }
     water_frequency { Faker::Lorem.word }
     temperature { Faker::Lorem.word }
     sun_light_exposure { Faker::Lorem.word }
-    user_id { association :user }
-    plant_journal_id {association :plant_journal}
+    association :user
   end
 end

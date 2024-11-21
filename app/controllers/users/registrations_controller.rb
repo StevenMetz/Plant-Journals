@@ -13,7 +13,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def update_user
     user = User.find_by(id: current_user.id)
     if current_user
-      if user.update(user_params)
+      user.image.attach(params[:image]) unless params[:image] == 'null'
+      user.banner.attach(params[:banner]) unless params[:banner] == 'null'
+      Rails.logger.info (" Params from user Update#{params}")
+      user.update(user_params)
+      if user.save
         respond_with(user, message: 'Succesfully Updated User')
       else
         render json: { message: "User couldn't be updated succesfully.", error: user.errors.full_messages }, status: :unprocessable_entity
