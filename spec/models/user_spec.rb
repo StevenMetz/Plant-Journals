@@ -31,6 +31,7 @@ RSpec.describe User, type: :model do
     it { should have_many(:plant_journals) }
     it { should have_many(:plants) }
     it { should have_many(:shared_journals)}
+    it { should have_many(:notifications)}
     it { should have_many(:shared_plant_journals).through(:shared_journals).source(:plant_journal) }
   end
 end

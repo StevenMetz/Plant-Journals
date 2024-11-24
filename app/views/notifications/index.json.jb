@@ -1,0 +1,10 @@
+@notifications.map do |notification|
+  {
+    id: notification.id,
+    title: notification.title, 
+    message: notification.message, 
+    viewed: notification.viewed, 
+    updated_at: notification.updated_at,
+    created_at: notification.created_at
+  }
+end

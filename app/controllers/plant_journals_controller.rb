@@ -23,14 +23,6 @@ class PlantJournalsController < ApplicationController
     @plant_journal = PlantJournal.new(plant_params.merge(user_id: current_user.id))
 
     if @plant_journal.save
-      # If plant_ids are provided, associate the plants
-      if params[:plant_ids].present?
-        params[:plant_ids].each do |plant|
-          new_plant = Plant.find_by(id: plant)
-          @plant_journal.plants << new_plant
-        end
-      end
-
       render :show, status: :created
     else
       render json: {
@@ -42,7 +34,6 @@ class PlantJournalsController < ApplicationController
 
   def share_journal
     @journal = current_user.plant_journals.find_by(id: params[:id])
-
     unless @journal
       render json: { message: 'Journal not found' }, status: :not_found
       return
@@ -50,27 +41,53 @@ class PlantJournalsController < ApplicationController
 
     begin
       user = User.find_by(email: params[:email])
-
       unless user
         render json: { message: 'User not found' }, status: :not_found
         return
       end
 
-      # Check if the journal has already been shared with the user
+
       if SharedJournal.exists?(user_id: user.id, plant_journal_id: @journal.id)
         render json: { message: "Journal is already shared with #{user.name}" }, status: :unprocessable_entity
         return
       end
 
-      # Create a new shared journal entry
-      shared_journal = SharedJournal.new(user_id: user.id, plant_journal_id: @journal.id)
-      if shared_journal.save
-        render json: { message: "#{current_user.name} has successfully shared their journal with #{user.name}" }
-      else
-        render json: { message: 'Unable to share journal', errors: shared_journal.errors.full_messages }, status: :unprocessable_entity
+      ActiveRecord::Base.transaction do
+        shared_journal = SharedJournal.create(user_id: user.id, plant_journal_id: @journal.id)
+
+        if shared_journal.save
+          notification = Notification.create(
+            user_id: user.id,
+            title: "New plant journal was shared with you.",
+            message: "#{current_user.name} shared #{@journal.title} with you"
+          )
+
+          if notification.save
+            render json: {
+              message: "#{current_user.name} has successfully shared their journal with #{user.name}",
+              notification: notification
+            }, status: :ok
+          else
+            render json: {
+              message: "Unable to send notification",
+              errors: notification.errors.full_messages
+            }, status: :unprocessable_entity
+            raise ActiveRecord::Rollback
+          end
+        else
+          Rails.logger.error "SharedJournal save failed: #{shared_journal.errors.full_messages}"
+          render json: {
+            message: 'Unable to share journal',
+            errors: shared_journal.errors.full_messages
+          }, status: :unprocessable_entity
+        end
       end
+
     rescue StandardError => e
-      render json: { message: 'An error occurred while sharing the journal', Error: e.full_messages }, status: :internal_server_error
+      render json: {
+        message: 'An error occurred while sharing the journal',
+        error: e.message
+      }, status: :internal_server_error
     end
   end
 
