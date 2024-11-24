@@ -1,5 +1,8 @@
 {
   id: @notification.id,
+  message: @notification.message,
+  viewed: @notification.viewed,
+  title: @notification.title,
   created_at: @notification.created_at,
   updated_at: @notification.updated_at
 }
