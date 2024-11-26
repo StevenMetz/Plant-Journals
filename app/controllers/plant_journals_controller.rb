@@ -48,7 +48,7 @@ class PlantJournalsController < ApplicationController
 
 
       if SharedJournal.exists?(user_id: user.id, plant_journal_id: @journal.id)
-        render json: { message: "Journal is already shared with #{user.name}" }, status: :unprocessable_entity
+        render json: { message: "#{@journal.title} is already shared with #{user.name}" }, status: :unprocessable_entity
         return
       end
 

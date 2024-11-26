@@ -1,7 +1,6 @@
 class NotificationsController < ApplicationController
   def index
-    @notifications = current_user.notifications
-    @notifications = Notification.order(created_at: :desc)
+    @notifications = Notification.where(user_id: current_user.id).order(created_at: :desc)
     render :index, status: :ok
   end
 
