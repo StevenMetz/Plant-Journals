@@ -50,6 +50,7 @@ json = {
   shared_journals: @user.shared_journals.map do |journal|
     {
       id: journal.id,
+      title: journal.plant_journal.title,
       users_name: journal.plant_journal.user.name,
       plants: journal.plant_journal.plants.map do |plant|
         {
