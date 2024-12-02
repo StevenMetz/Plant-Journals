@@ -17,7 +17,7 @@ RSpec.describe NotificationsController, type: :controller do
     it 'returns all notifications in descending order' do
       get :index, as: :json
       expect(response).to have_http_status(:ok)
-      expect(assigns(:notifications)).to eq(Notification.order(created_at: :desc))
+      expect(assigns(:notifications)).to eq(Notification.where(user_id: user.id).order(created_at: :desc))
     end
   end
 
