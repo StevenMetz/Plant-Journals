@@ -26,7 +26,7 @@ RSpec.describe Users::PasswordsController, type: :controller do
       # Intercept the email and extract the reset token
       mail = ActionMailer::Base.deliveries.last
       expect(mail).not_to be_nil
-      token = mail.body.encoded.match(/reset-password\?token=([\w\-]*)/)[1].gsub(/^3D/,"")
+      token = mail.body.encoded.match(/Code: ([\w\-]*)/)[1]
       expect(token).not_to be_nil
       put :update, params: {
         user: {
@@ -35,7 +35,6 @@ RSpec.describe Users::PasswordsController, type: :controller do
           password_confirmation: "newpassword123"
         }
       }, as: :json
-      pry
       # Verify the response
       expect(response).to have_http_status(:ok)
       expect(user.reload.valid_password?("newpassword123")).to be true

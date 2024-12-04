@@ -6,7 +6,6 @@ class UserMailer < ApplicationMailer
 
     @token = token
     @user = record
-    @reset_password_url = "https://your-frontend.com/reset-password?token=#{@token}"
 
     mail(
       to: @user.email,
@@ -23,6 +22,18 @@ class UserMailer < ApplicationMailer
       subject: "Welcome email",
       template_path: "user_mailer",
       template_name: "welcome_email"
+    )
+  end
+
+  def shared_journal_email(user,other_user, journal)
+    @journal = journal
+    @user = user
+    @other_user = other_user
+    mail(
+      to: @other_user.email,
+      subject: "A new plant journal was shared with you",
+      template_path: "user_mailer",
+      template_name: "shared_journal_email"
     )
   end
 end

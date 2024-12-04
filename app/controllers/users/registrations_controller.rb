@@ -6,8 +6,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
   respond_to :json
   # POST /resource
   def create
-    Rails.logger.info(params.inspect)
-    super
+    super do |user|
+      if user.persisted?
+        UserMailer.welcome_email(user).deliver_now
+      end
+    end
   end
 
   def update_user
