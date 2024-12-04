@@ -1,34 +1,51 @@
-# frozen_string_literal: true
-
 class Users::PasswordsController < Devise::PasswordsController
-  # GET /resource/password/new
-  # def new
-  #   super
-  # end
+  # Disable CSRF protection for API routes
 
-  # POST /resource/password
+
+  # POST /password/reset
   def create
-    super
-  end
+    # Find user by email
+    self.resource = resource_class.find_by(email: resource_params[:email])
 
-  # GET /resource/password/edit?reset_password_token=abcdef
-  # def edit
-  #   super
-  # end
+    if resource.present?
+      # Generate and send reset instructions
+      resource.send_reset_password_instructions
 
-  # PUT /resource/password
-  def update
-    super
-  end
-
-  protected
-
-    def after_resetting_password_path_for(resource)
-      super(resource)
+      render json: {
+        message: 'Password reset instructions sent successfully',
+        status: 'success',
+        # Optionally send a masked email for security feedback
+        email: resource.email.gsub(/(?<=.{2}).(?=.{2})/,'*')
+      }, status: :ok
+    else
+      render json: {
+        message: 'No user found with that email',
+        status: 'error'
+      }, status: :not_found
     end
+  end
 
-  # The path used after sending reset password instructions
-    def after_sending_reset_password_instructions_path_for(resource_name)
-      super(resource_name)
+  # PUT /password/update
+  def update
+    # Reset password using token
+    self.resource = resource_class.reset_password_by_token(resource_params)
+
+    if resource.errors.empty?
+      render json: {
+        message: 'Password reset successfully',
+        status: 'success'
+      }, status: :ok
+    else
+      render json: {
+        errors: resource.errors.full_messages,
+        status: 'error'
+      }, status: :unprocessable_entity
+    end
+  end
+
+  private
+
+    def resource_params
+      params.require(:user).permit(:email, :reset_password_token, :password, :password_confirmation)
     end
 end

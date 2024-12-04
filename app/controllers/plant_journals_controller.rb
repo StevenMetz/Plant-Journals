@@ -74,6 +74,7 @@ class PlantJournalsController < ApplicationController
             }, status: :unprocessable_entity
             raise ActiveRecord::Rollback
           end
+          UserMailer.shared_journal_email(current_user,user,@journal.title).deliver_now
         else
           Rails.logger.error "SharedJournal save failed: #{shared_journal.errors.full_messages}"
           render json: {
