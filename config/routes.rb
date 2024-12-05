@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'feedback/index'
+  get 'feedback/show'
+  get 'feedback/update'
+  get 'feedback/destroy'
   resources :notifications
   post 'plant_journal/share_journal/:id', to:'plant_journals#share_journal', as: 'share_journal'
   patch 'plant_journal/update/:id/' => 'plants#update_plant_journal'
