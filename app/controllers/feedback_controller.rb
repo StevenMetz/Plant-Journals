@@ -9,12 +9,12 @@ class FeedbackController < ApplicationController
     render :show
   end
   def create
-    @feedback = Feedback.new(feedback_params)
+    @feedback = Feedback.new(feedback_params.merge(user_id: current_user.id))
 
     if @feedback.save
       render json: {message: "Feedback created"}, status: :created
     else
-      render json: {message: "Error submiting feedback", errors: @feedback.errors.full_messages.to_sentence}
+      render json: {message: "Error submiting feedback", errors: @feedback.errors.full_messages.to_sentence}, status: :unprocessable_entity
     end
   end
   def update
@@ -23,7 +23,7 @@ class FeedbackController < ApplicationController
     if @feedback.update(feedback_params)
       render json: {message: "Feedback updated"}, status: :ok
     else
-      render json: {message: "Error updating feedback", errors: @feedback.errors.full_messages.to_sentence}
+      render json: {message: "Error updating feedback", errors: @feedback.errors.full_messages.to_sentence},status: :unprocessable_entity
     end
   end
 
@@ -43,6 +43,6 @@ class FeedbackController < ApplicationController
 
   private
     def feedback_params
-      params.permit(:user_id, :message, :rating)
+      params.permit( :message, :rating)
     end
 end

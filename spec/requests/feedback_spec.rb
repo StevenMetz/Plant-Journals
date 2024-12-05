@@ -1,10 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe FeedbackController, type: :controller do
-  let(:user) {create(:user)}
+  let(:user) { create(:user) }
+  let(:feedback) {create(:feedback, user: user)}
+  before do
+    sign_in user
+    allow(controller).to receive(:current_user).and_return(user)
+  end
   let(:valid_attributes) {
     {
-      user_id: user.id,
       message: "Great service!",
       rating: 5
     }
@@ -25,8 +29,14 @@ RSpec.describe FeedbackController, type: :controller do
     end
 
     it "assigns all feedbacks to @feedbacks" do
-      feedback1 = Feedback.create!(valid_attributes)
-      feedback2 = Feedback.create!(valid_attributes.merge(message: "Another feedback"))
+      feedback1 = user.feedbacks.create!(
+      message: "Great service!",
+      rating: 5
+    )
+      feedback2 = user.feedbacks.create!(
+        message: "Another feedback",
+        rating: 4
+      )
 
       get :index, as: :json
 
@@ -40,7 +50,6 @@ RSpec.describe FeedbackController, type: :controller do
   end
 
   describe "GET #show" do
-    let(:feedback) { Feedback.create!(valid_attributes) }
 
     it "returns a successful response" do
       get :show, params: { id: feedback.id }, as: :json
@@ -100,7 +109,6 @@ RSpec.describe FeedbackController, type: :controller do
   end
 
   describe "PATCH #update" do
-    let(:feedback) { Feedback.create!(valid_attributes) }
 
     context "with valid parameters" do
       it "updates the feedback" do
@@ -132,7 +140,7 @@ RSpec.describe FeedbackController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    let!(:feedback) { Feedback.create!(valid_attributes) }
+    let!(:feedback) { create(:feedback, user: user)}
 
     it "destroys the requested feedback" do
       expect {
