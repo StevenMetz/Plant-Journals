@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :feedback do
-    user_id { 1 }
     message { "MyString" }
     rating { 1 }
+    association :user
   end
 end

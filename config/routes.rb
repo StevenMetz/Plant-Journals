@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     delete 'plants/:id', to: 'plant_journals#destroy_plant', as: 'destroy_plant'
   end
   resources :plants
+  resources :feedback
   devise_for :users, skip: :all
   devise_scope :user do
     get 'user/profile' => "users/profile#show"

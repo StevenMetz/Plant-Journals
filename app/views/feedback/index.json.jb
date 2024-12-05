@@ -1,0 +1,7 @@
+@feedbacks.map do |feedback|
+  {
+    id: feedback.id,
+    rating: feedback.rating,
+    message: feedback.message,
+  }
+end
