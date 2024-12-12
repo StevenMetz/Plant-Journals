@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     post 'login' => "users/sessions#create"
     post 'signup' => 'users/registrations#create'
     delete 'delete_account/:id' => 'users/registrations#destroy'
-    patch 'user/:id' => 'users/registrations#update_user'
+    patch 'user/:id' => 'users/profile#update_user'
     delete 'user/:id/delete' => 'users/registrations#delete_user'
     post 'password/reset' => 'users/passwords#create'
     put 'password/update' => 'users/passwords#update'

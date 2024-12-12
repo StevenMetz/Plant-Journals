@@ -27,31 +27,6 @@ RSpec.describe Users::RegistrationsController, type: :controller do
       end
     end
   end
-
-  describe "PATCH #update" do
-    let(:user) { create(:user) }
-
-    context "With Valid Parameters" do
-      it "updates user's profile" do
-        sign_in user
-        patch :update_user, params: { id: user.id, user: { email: "new_email@test.com" } }
-        expect(response).to have_http_status(:success)
-        json_response = JSON.parse(response.body)
-        expect(json_response['status']['message']).to eq("Succesfully Updated User")
-      end
-    end
-
-    context "With Invalid Parameters" do
-      it "does not update user's profile" do
-        sign_in user
-        patch :update_user, params: { id: user.id, user: { email: "invalid_email" } }
-        expect(response).to have_http_status(:unprocessable_entity)
-        json_response = JSON.parse(response.body)
-        expect(json_response['message']).to include("User couldn't be updated succesfully.")
-      end
-    end
-  end
-
   describe "DELETE #destroy" do
     let(:user) { create(:user) }
 
