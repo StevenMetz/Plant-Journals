@@ -3,7 +3,7 @@
     id: plant.id,
     user_id: plant.user_id,
     plant_journal_id: plant.plant_journals.map do |plant_journal| plant_journal.id end,
-    image: plant.image.attached? ? (plant.image.service_name == 'Cloudinary' ? plant.image.url : rails_blob_url(plant.image, host: "http://localhost:3000")) : nil,
+    image: plant.image.attached? ? (plant.image.service_name == 'cloudinary' ? plant.image.url : rails_blob_url(plant.image, host: "http://localhost:3000")) : nil,
     title: plant.title,
     description: plant.description,
     likes: plant.likes,

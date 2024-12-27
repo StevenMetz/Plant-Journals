@@ -9,7 +9,7 @@
   temperature: @plant.temperature,
   sun_light_exposure: @plant.sun_light_exposure,
   image: @plant.image.attached? ? 
-         (@plant.image.service_name == 'Cloudinary' ? @plant.image.url : rails_blob_url(@plant.image, host: "http://localhost:3000")) 
+         (@plant.image.service_name == 'cloudinary' ? @plant.image.url : rails_blob_url(@plant.image, host: "http://localhost:3000")) 
          : nil,
   updated_at: @plant.updated_at
 }
