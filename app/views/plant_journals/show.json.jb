@@ -9,6 +9,7 @@
       water_frequency: plant.water_frequency,
       temperature: plant.temperature,
       sun_light_exposure: plant.sun_light_exposure
+       journal_id: plant.plant_journals.map do |plant_journal| plant_journal.id end
     }
   } ,
   created_at: @plant_journal.created_at,
