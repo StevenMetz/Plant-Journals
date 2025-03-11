@@ -3,12 +3,16 @@
   title: @plant_journal.title,
   plants: @plant_journal.plants.map { |plant| 
     { title: plant.title,
+      id: plant.id,
       description: plant.description,
       likes: plant.likes,
       dislikes: plant.dislikes,
       water_frequency: plant.water_frequency,
       temperature: plant.temperature,
-      sun_light_exposure: plant.sun_light_exposure
+      sun_light_exposure: plant.sun_light_exposure,
+       image: plant.image.attached? ? 
+         (plant.image.service_name == 'cloudinary' ? plant.image.url : rails_blob_url(plant.image, host: "http://localhost:3000")) 
+         : nil,
        journal_id: plant.plant_journals.map do |plant_journal| plant_journal.id end
     }
   } ,
