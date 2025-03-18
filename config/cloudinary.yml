@@ -1,0 +1,17 @@
+development:
+  cloud_name: <%= Rails.application.credentials.dig(:CLOUD_NAME) %>
+  api_key: <%= Rails.application.credentials.dig(:CLOUD_KEY) %>
+  api_secret: <%= Rails.application.credentials.dig(:CLOUD_SECRET) %>
+  secure: true
+
+test:
+  cloud_name: <%= Rails.application.credentials.dig(:CLOUD_NAME) %>
+  api_key: <%= Rails.application.credentials.dig(:CLOUD_KEY) %>
+  api_secret: <%= Rails.application.credentials.dig(:CLOUD_SECRET) %>
+  secure: true
+
+production:
+  cloud_name: <%= Rails.application.credentials.dig(:CLOUD_NAME) %>
+  api_key: <%= Rails.application.credentials.dig(:CLOUD_KEY) %>
+  api_secret: <%= Rails.application.credentials.dig(:CLOUD_SECRET) %>
+  secure: true
