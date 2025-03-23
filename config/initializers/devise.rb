@@ -197,7 +197,7 @@ Devise.setup do |config|
   config.lock_strategy = :failed_attempts
 
   # Defines which key will be used when locking and unlocking an account
-  # config.unlock_keys = [:email]
+  config.unlock_keys = [:email]
 
   # Defines which strategy will be used to unlock an account.
   # :email = Sends an unlock link to the user email
@@ -321,7 +321,7 @@ Devise.setup do |config|
     jwt.revocation_requests = [
       ['DELETE', %r{^/logout$}]
     ]
-    jwt.expiration_time = 1.day.from_now.to_i
+    jwt.expiration_time = 1.day.to_i
     jwt.algorithm = "HS256"
   end
 
