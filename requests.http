@@ -1,9 +1,0 @@
-@token = eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJkYTkwMjQwYy0xZmE5LTRlZTItODhhYy1lMmVkZjlmMWRmNTIiLCJzdWIiOiIxOSIsInNjcCI6InVzZXIiLCJhdWQiOm51bGwsImlhdCI6MTcxMzQwNDQ4OCwiZXhwIjozNDI2ODk0OTg0fQ.AeO_YjwEjTU9dL77Y3-k8SmOVNrlW30hf1ZDLrm-x_c
-
-PATCH http://localhost:3000/user/1.json 
-Content-Type: application/json
-Authorization: Bearer {{token}}
-
-{"user":{
-  "name": "Howdy Do"
-}}
