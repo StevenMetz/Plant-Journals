@@ -18,8 +18,7 @@ class NotificationsController < ApplicationController
 
     if @notification
       if @notification.update(notification_params)
-        # Return all notifications, sorted by created_at
-        @notifications = Notification.order(created_at: :desc)
+        @notifications = Notification.where(user_id: current_user.id).order(created_at: :desc)
         render :index
       else
         render json: { message: "Unable to update notification", errors: @notification.errors }, status: :unprocessable_entity
