@@ -102,7 +102,7 @@ RSpec.describe NotificationsController, type: :controller do
       it 'returns success status and updated notifications' do
         patch :update, params: update_params, as: :json
         expect(response).to have_http_status(:success)
-        expect(assigns(:notifications)).to eq(Notification.order(created_at: :desc))
+        expect(assigns(:notifications)).to eq(Notification.where(user_id: user.id).order(created_at: :desc))
       end
     end
 
