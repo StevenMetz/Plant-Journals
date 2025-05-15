@@ -16,14 +16,46 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def delete_user
     user = User.find_by(id: current_user.id)
-    if current_user.id == user.id
-      if user.destroy
-        respond_with(user, message: 'Successfully deleted user', status: :ok)
-      else
-        respond_with(message: "Unable to delete user", error: user.errors.full_messages , status: :unprocessable_entity)
+
+    if user.nil?
+      render json: { message: "User not found" }, status: :not_found
+      return
+    end
+
+    if current_user.id != user.id
+      render json: { message: "Unauthorized to delete this user" }, status: :unauthorized
+      return
+    end
+
+    begin
+      User.transaction do
+        SharedJournal.where(plant_journal_id: user.plant_journals.pluck(:id)).destroy_all
+        user.shared_journals.destroy_all
+        user.plant_journals.destroy_all
+        user.notifications.destroy_all
+        user.plants.destroy_all
+        user.feedbacks.destroy_all
+        user.image.purge if user.image.attached?
+        user.banner.purge if user.banner.attached?
+        user.destroy!
       end
-    else
-      render json: { message: "Unauthorized to update this user" }, status: :unauthorized
+
+      render json: {
+        message: 'User and all associated data successfully deleted',
+        status: :ok
+      }
+    rescue ActiveRecord::RecordNotDestroyed => e
+      Rails.logger.error("Failed to delete user: #{e.message}")
+      Rails.logger.error("Validation errors: #{e.record.errors.full_messages}")
+      render json: {
+        message: "Unable to delete user and associated data",
+        errors: e.record.errors.full_messages
+      }, status: :unprocessable_entity
+    rescue StandardError => e
+      render json: {
+        message: "An error occurred while deleting the user",
+        error: e.message
+      }, status: :internal_server_error
     end
   end
   # DELETE /resource
